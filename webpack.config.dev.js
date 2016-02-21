@@ -74,7 +74,11 @@ module.exports = {
       include: path.join(srcPath, "assets/styles"),
       loaders: [
         "style",
-        "css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]",
+        "css?" + JSON.stringify({
+          modules: true,
+          importLoaders: 1,
+          localIdentName: "[path]___[name]__[local]___[hash:base64:5]"
+        }),
         "stylus"
       ]
     }, {

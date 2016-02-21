@@ -57,8 +57,12 @@ module.exports = {
       include: path.join(srcPath, "assets/styles"),
       loader: ExtractTextPlugin.extract(
         "style",
-        "css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!stylus"
-      )
+        "css?" + JSON.stringify({
+          modules: true,
+          importLoaders: 1,
+          localIdentName: "[name]__[local]___[hash:base64:5]",
+        }) + "!stylus"
+      ) // dodgy af
     }, {
       test: /\.json$/,
       include: path.join(srcPath, "assets"),
@@ -68,7 +72,16 @@ module.exports = {
       include: path.join(srcPath, "assets/images"),
       loaders: [
         "file?hash=sha512&digest=hex&name=[hash].[ext]",
-        "image-webpack?{progressive:true, optimizationLevel: 7, interlaced: false, pngquant:{quality: \"65-90\", speed: 2, verbose: true}}"
+        "image-webpack?" + JSON.stringify({
+          progressive: true,
+          optimizationLevel: 7,
+          interlaced: false,
+          pngquant: {
+            quality: "65-90",
+            speed: 2,
+            verbose: true
+          }
+        })
       ]
     }]
   },
