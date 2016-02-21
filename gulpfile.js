@@ -1,6 +1,5 @@
 "use strict";
 
-var path = require("path");
 var express = require("express");
 var httpProxy = require("http-proxy");
 var gitSubtree = require('gulp-gh-pages');
@@ -10,9 +9,8 @@ var webpack = require("webpack");
 var webpackStream = require("webpack-stream");
 var webpackDevMiddleware = require("webpack-dev-middleware");
 var webpackHotMiddleware = require("webpack-hot-middleware");
-var webpackConfig = process.env.NODE_ENV === "production" ?
-  require("./webpack.config.prod")
-: require("./webpack.config.dev");
+var webpackConfigProd = require("./webpack.config.prod");
+var webpackConfigDev = require("./webpack.config.dev");
 
 
 // The development server (the recommended option for development)
@@ -21,12 +19,15 @@ gulp.task("default", ["webpack-dev-server"]);
 // Production build
 gulp.task("build", ["webpack:build"]);
 
+// Deploy with git to 'production' branch.
+gulp.task("deploy", ["git:deploy"]);
+
 /*
  * Build. One and done.
  */
 gulp.task("webpack:build", function() {
   return gulp.src("src/index.js")
-    .pipe(webpackStream(webpackConfig, null, function(err, stats) {
+    .pipe(webpackStream(webpackConfigProd, null, function(err, stats) {
       if (err) throw new gutil.PluginError("webpack:build", err);
       gutil.log("[webpack:build]", stats.toString({
         // output options
@@ -45,13 +46,13 @@ gulp.task("webpack:build", function() {
 gulp.task("webpack-dev-server", function(callback) {
   var app = express();
   var apiProxy = httpProxy.createProxyServer();
-  var compiler = webpack(webpackConfig);
+  var compiler = webpack(webpackConfigDev);
 
   // Start a webpack-dev-server
   app.use(webpackDevMiddleware(compiler, {
     // server and middleware options
     open: true,
-    publicPath: webpackConfig.output.publicPath,
+    publicPath: webpackConfigDev.output.publicPath,
     stats: {
       colors: true,
       chunkModules: true
@@ -87,7 +88,7 @@ gulp.task("webpack-dev-server", function(callback) {
 /*
  * Deployment.
  */
-gulp.task("deploy", function() {
+gulp.task("git:deploy", function() {
   return gulp.src('./dist/**/*')
     .pipe(gitSubtree({
       branch: "production"
