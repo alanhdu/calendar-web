@@ -22,7 +22,7 @@
   "homepage": "https://github.com/ADI-Labs/calendar-web#readme",
   "ava": {
     "files": [
-      "__tests__/**/*.js"
+      "test/**/*.js"
     ],
     "failFast": true,
     "tap": true,
