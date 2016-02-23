@@ -5,10 +5,10 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "gulp",
-    "deploy": "gulp deploy",
+    "test": "echo \"No unit tests and e2e tests yet\" && exit 0"
     "build": "gulp build",
-    "test": "ava",
-    "clean": "rimraf dist && rimraf .publish"
+    "deploy": "gulp deploy",
+    "clean": "rimraf dist .publish"
   },
   "repository": {
     "type": "git",
@@ -43,7 +43,7 @@
     "react-lite": "0.0.23",
     "react-redux": "^4.4.0",
     "react-router": "^2.0.0",
-    "react-router-redux": "^3.0.0",
+    "react-router-redux": "^4.0.0",
     "redux": "^3.3.1",
     "redux-actions": "^0.9.1",
     "redux-promise": "^0.5.1",
